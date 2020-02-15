@@ -21,7 +21,18 @@ Status Report:
 
 Plan for next week:
 * Class definition for switch positional data
-* Led indication of switch state (on/off, green/red)
-* Brushless motor control (for physical movement of switch)
 * Authenticate with smart light API 
-* Present sample light API requests and responses
+* Global logging configuration
+
+### Week 2
+
+Status report:
+* Re-organized project structure into config/test/src directories
+* Created class structure for switch positional data
+* Started definition global logger configuration for both console and file-based application logging
+* Succuessfully authenticated with smart light API
+
+Plan for next week:
+* Complete global logging configuration
+* Light switch led indicator control
+* Control on/off state of single light
