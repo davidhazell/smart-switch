@@ -20,7 +20,7 @@ class SwitchPosition:
         GPIO.setup(self.__dt, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
         self.__clkLastState = GPIO.input(self.__clk)
 
-        # Initialize counter variable
+        # Initialize counter variable and interval at which to check position
         # - For now assume switch start position is 0 (middle)
         # - In the future we will use motors to establish start position
         #
@@ -56,9 +56,9 @@ class SwitchPosition:
             # Compare current state with last state to determine change in position
             if clkState != self.__clkLastState:
                 if dtState != clkState:
-                    self.__step_counter -= 1
-                else:
                     self.__step_counter += 1
+                else:
+                    self.__step_counter -= 1
                 
                 self.__logger.debug("Position: %s" % self.__step_counter)
 
@@ -66,5 +66,5 @@ class SwitchPosition:
                 self.__clkLastState = clkState
                     
                 # Sleep for 1/10 of a second
-                sleep(self.__interval)
+                sleep(self.__update_interval)
 
