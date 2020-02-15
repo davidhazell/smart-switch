@@ -1,12 +1,16 @@
+import logging
+import threading
 from RPi import GPIO
 from time import sleep
-import threading
+
 
 class SwitchPosition:
 
     def __init__(self, clk=17, dt=18):
 
-        print "DEBUG: BEGIN SwitchPosition.__init__()"
+        # Logging
+        self.__logger = logging.getLogger(__name__)
+        self.__logger.debug("Creating new SwitchPosition instance with clk=%i and dt=%i" % (clk, dt))
 
         # Set GPIO board values and initialize
         self.__clk = int(clk)
@@ -17,26 +21,21 @@ class SwitchPosition:
         self.__clkLastState = GPIO.input(self.__clk)
 
         # Initialize counter variable
+        # - For now assume switch start position is 0 (middle)
+        # - In the future we will use motors to establish start position
         #
-        # * For now assume switch start position is 0 (middle)
-        # * In the future we will use motors to establish start position
-        #
-        self.__counter = 0
-        self.__interval = 0.01
+        self.__step_counter = 0
+        self.__update_interval = 0.01
         
         # Begin monitoring position
-        print "DEBUG: BEFORE threading.Thread()"
         self.__thread = threading.Thread(target=self.__watch_position)
-        print "DEBUG: BEFORE setDaemon()"
         self.__thread.setDaemon(True)
-        print "DEBUG: BEFORE start()"
         self.__thread.start()
-        print "DEBUG: END SwitchPosition.__INIT__()"
 
 
     @property
     def power_state(self):
-        if self.__counter > 0:
+        if self.__step_counter > 0:
             return "ON"
         else:
             return "OFF"
@@ -44,12 +43,11 @@ class SwitchPosition:
 
     @property
     def position(self):
-        return self.__counter
+        return self.__step_counter
 
 
+    # Check and update position on a defined interval
     def __watch_position(self):
-
-        print "DEBUG: SwitchPosition.__watch_position()"
 
         while True:
             # Get current GPIO input states
@@ -58,12 +56,12 @@ class SwitchPosition:
             # Compare current state with last state to determine change in position
             if clkState != self.__clkLastState:
                 if dtState != clkState:
-                    self.__counter += 1
+                    self.__step_counter -= 1
                 else:
-                    self.__counter -= 1
+                    self.__step_counter += 1
                 
-                print "DEBUG: position=%i" % self.__counter
-             
+                self.__logger.debug("Position: %s" % self.__step_counter)
+
                 # Reset clkLastState to current clkState for future comparisons
                 self.__clkLastState = clkState
                     
