@@ -2,9 +2,10 @@ import logging
 import threading
 from RPi import GPIO
 from time import sleep
+from hardware import SwitchHardware
 
 
-class SwitchPosition(SwitchHardware):
+class RotaryEncoder(SwitchHardware):
 
     def __init__(self, clk=17, dt=18):
 

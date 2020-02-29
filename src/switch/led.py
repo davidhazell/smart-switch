@@ -1,20 +1,20 @@
 import logging
-from hardware import SwitchHardware
 from RPi import GPIO
-#from gpiozero import LED
+from hardware import SwitchHardware
 
-class SwitchLed(SwitchHardware):
 
-    def __init__(self, pin=22):
+class SwitchStatus(SwitchHardware):
+
+    def __init__(self, gpio_pin):
         # Inherite from SwitchHardware
         SwitchHardware.__init__(self)
         
         # logging configuration
         self.__logger = logging.getLogger(__name__)
-        self.__logger.info('Creating new LED instance')
+        self.__logger.info("Creating new LED instance at GPIO pin '%s'" % str(gpio_pin))
         
         # GPIO setup
-        self.__pin = pin
+        self.__pin = gpio_pin
         GPIO.setup(self.__pin, GPIO.OUT)
 
 
@@ -24,17 +24,17 @@ class SwitchLed(SwitchHardware):
 
 
     def turn_on(self):
-        self.__logger.info('Turning on led')
+        self.__logger.info("Turning on led")
         GPIO.output(self.__pin, GPIO.HIGH)
 
 
     def turn_off(self):
-        self.__logger.info('Turning off led')
+        self.__logger.info("Turning off led")
         GPIO.output(self.__pin, GPIO.LOW)
 
 
     def toggle(self):
-        self.__logger.info('Toggling led')
+        self.__logger.info("Toggling led")
         if self.on == False:
             self.on()
         else:
@@ -43,5 +43,5 @@ class SwitchLed(SwitchHardware):
 
     def __del__(self):
         GPIO.cleanup()
-        self.__logger.info('GPIO.cleanup() complete.')
+        self.__logger.info("GPIO.cleanup() complete.")
 
