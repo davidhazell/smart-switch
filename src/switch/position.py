@@ -4,9 +4,12 @@ from RPi import GPIO
 from time import sleep
 
 
-class SwitchPosition:
+class SwitchPosition(SwitchHardware):
 
     def __init__(self, clk=17, dt=18):
+
+        # Inherite from SwitchHardware
+        SwitchHardware.__init__(self)
 
         # Logging
         self.__logger = logging.getLogger(__name__)
@@ -15,7 +18,7 @@ class SwitchPosition:
         # Set GPIO board values and initialize
         self.__clk = int(clk)
         self.__dt  = int(dt)
-        GPIO.setmode(GPIO.BCM)
+        #GPIO.setmode(GPIO.BCM)
         GPIO.setup(self.__clk, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
         GPIO.setup(self.__dt, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
         self.__clkLastState = GPIO.input(self.__clk)
@@ -34,11 +37,11 @@ class SwitchPosition:
 
 
     @property
-    def power_state(self):
+    def on(self):
         if self.__step_counter > 0:
-            return "ON"
+            return True
         else:
-            return "OFF"
+            return False
 
 
     @property
@@ -49,6 +52,8 @@ class SwitchPosition:
     # Check and update position on a defined interval
     def __watch_position(self):
 
+        self.__logger.info('Starting thread to monitor switch position')
+
         while True:
             # Get current GPIO input states
             clkState = GPIO.input(self.__clk)
@@ -57,11 +62,11 @@ class SwitchPosition:
             if clkState != self.__clkLastState:
                 if dtState != clkState:
                     self.__step_counter += 1
+                    self.__logger.debug("Position changed: %s (+1)" % self.__step_counter)
                 else:
                     self.__step_counter -= 1
+                    self.__logger.debug("Position changed: %s (-1)" % self.__step_counter)
                 
-                self.__logger.debug("Position: %s" % self.__step_counter)
-
                 # Reset clkLastState to current clkState for future comparisons
                 self.__clkLastState = clkState
                     

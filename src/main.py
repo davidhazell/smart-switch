@@ -3,7 +3,7 @@ import logging.config
 import threading
 import os, sys
 import time
-from hue.connection import HueService
+from lights.connection import HueService
 from switch.switch import SwitchService
 
 
@@ -14,9 +14,10 @@ class SmartSwitch(threading.Thread):
 
         # Logging
         sys.path.append('..')
-        logging.config.fileConfig('config/logging.config')
+        logging.config.fileConfig('../config/logging.config')
         self.logger = logging.getLogger(__name__)
         self.logger.info('TEST')
+        print 'TEST'
 
         # Services
         self.__hue = HueService()
