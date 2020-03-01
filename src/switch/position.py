@@ -2,24 +2,20 @@ import logging
 import threading
 from RPi import GPIO
 from time import sleep
-from hardware import SwitchHardware
 
 
-class RotaryEncoder(SwitchHardware):
+class SwitchPosition:
 
-    def __init__(self, clk=17, dt=18):
-
-        # Inherite from SwitchHardware
-        SwitchHardware.__init__(self)
+    def __init__(self, gpio_clk, gpio_dt):
 
         # Logging
         self.__logger = logging.getLogger(__name__)
-        self.__logger.debug("Creating new SwitchPosition instance with clk=%i and dt=%i" % (clk, dt))
+        self.__logger.debug("Creating new SwitchPosition instance at GPIO pins \'%i\' and \'%i\'" % (int(gpio_clk),
+                                                                                                     int(gpio_dt)))
 
         # Set GPIO board values and initialize
-        self.__clk = int(clk)
-        self.__dt  = int(dt)
-        #GPIO.setmode(GPIO.BCM)
+        self.__clk = int(gpio_clk)
+        self.__dt  = int(gpio_dt)
         GPIO.setup(self.__clk, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
         GPIO.setup(self.__dt, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
         self.__clkLastState = GPIO.input(self.__clk)
@@ -36,7 +32,6 @@ class RotaryEncoder(SwitchHardware):
         self.__thread.setDaemon(True)
         self.__thread.start()
 
-
     @property
     def on(self):
         if self.__step_counter > 0:
@@ -44,11 +39,9 @@ class RotaryEncoder(SwitchHardware):
         else:
             return False
 
-
     @property
     def position(self):
         return self.__step_counter
-
 
     # Check and update position on a defined interval
     def __watch_position(self):
@@ -73,4 +66,3 @@ class RotaryEncoder(SwitchHardware):
                     
                 # Sleep for 1/10 of a second
                 sleep(self.__update_interval)
-

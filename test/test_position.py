@@ -1,19 +1,21 @@
+import logging.config
 import time
-import sys
-import logging, logging.config
-sys.path.append('..')
-from src.motors.position import SwitchPosition
-
+import os.path, sys
+sys.path.append(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir))
+from RPi import GPIO
+from src.switch.position import SwitchPosition
 
 # Logging
 logging.config.fileConfig('../config/logging.config')
 logger = logging.getLogger(__name__)
 
-# Create new SwitchPosition() instance and define update interval
-new_switch = SwitchPosition()
-update_interval_seconds = 5
+# GPIO
+GPIO.setmode()
 
-logger.debug("Begin checking switch state")
+# Create new SwitchPosition() instance and define update interval
+new_switch = SwitchPosition(gpio_clk=23, gpio_dt=24)
+
+update_interval_seconds = 5
 
 # Check switch position every update_interval_seconds
 while True:
@@ -26,6 +28,4 @@ while True:
     logger.debug("SWITCH STATE is %s" % power_state_text)
     logger.debug("Checking state again in %s seconds..." % update_interval_seconds)
     time.sleep(update_interval_seconds)
-
-
 

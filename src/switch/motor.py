@@ -1,19 +1,18 @@
-from RPi import GPIO
-from hardware import SwitchHardware
+import logging
 import time
+from RPi import GPIO
 
 
-class SwitchMovement(SwitchHardware):
+class SwitchMovement:
 
-    def __init__(self, pin):
-        # Inherit from SwitchHardware
-        SwitchHardware.__init__(self)
+    def __init__(self, gpio_pin):
 
         # Logging configuration
-        self.__logger = loggingConfig.getLogger(__name__)
+        self.__logger = logging.getLogger(__name__)
+        self.__logger.info("Creating new motor instance at GPIO pin '%i'" % int(gpio_pin))
 
         # ToDo: GPIO setup
-        self.__pin = pin
+        self.__pin = int(gpio_pin)
         GPIO.setup(self.__pin, GPIO.LOW)
         self.__motor_power_interval = .001
 
