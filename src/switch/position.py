@@ -9,13 +9,13 @@ class SwitchPosition:
     def __init__(self, gpio_clk, gpio_dt):
 
         # Logging
-        self.__logger = logging.getLogger(__name__)
-        self.__logger.debug("Creating new SwitchPosition instance at GPIO pins \'%i\' and \'%i\'" % (int(gpio_clk),
-                                                                                                     int(gpio_dt)))
+        logging.getLogger(__name__)
+        logging.debug("Creating new SwitchPosition instance at GPIO pins \'%i\' and \'%i\'" % (int(gpio_clk),
+                                                                                               int(gpio_dt)))
 
         # Set GPIO board values and initialize
         self.__clk = int(gpio_clk)
-        self.__dt  = int(gpio_dt)
+        self.__dt = int(gpio_dt)
         GPIO.setup(self.__clk, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
         GPIO.setup(self.__dt, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
         self.__clkLastState = GPIO.input(self.__clk)
@@ -26,7 +26,7 @@ class SwitchPosition:
         #
         self.__step_counter = 0
         self.__update_interval = 0.01
-        
+
         # Begin monitoring position
         self.__thread = threading.Thread(target=self.__watch_position)
         self.__thread.setDaemon(True)
@@ -46,7 +46,7 @@ class SwitchPosition:
     # Check and update position on a defined interval
     def __watch_position(self):
 
-        self.__logger.info('Starting thread to monitor switch position')
+        logging.info('Starting thread to monitor switch position')
 
         while True:
             # Get current GPIO input states
@@ -56,13 +56,13 @@ class SwitchPosition:
             if clkState != self.__clkLastState:
                 if dtState != clkState:
                     self.__step_counter += 1
-                    self.__logger.debug("Position changed: %s (+1)" % self.__step_counter)
+                    logging.debug("Position changed: %s (+1)" % self.__step_counter)
                 else:
                     self.__step_counter -= 1
-                    self.__logger.debug("Position changed: %s (-1)" % self.__step_counter)
-                
+                    logging.debug("Position changed: %s (-1)" % self.__step_counter)
+
                 # Reset clkLastState to current clkState for future comparisons
                 self.__clkLastState = clkState
-                    
+
                 # Sleep for 1/10 of a second
-                sleep(self.__update_interval)
+                # sleep(self.__update_interval)

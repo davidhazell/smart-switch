@@ -1,14 +1,11 @@
 import logging
-from RPi import GPIO
+import RPi.GPIO as GPIO
 
 
 class SwitchIndicator:
 
     def __init__(self, gpio_pin):
-        
-        # logging configuration
-        self.__logger = logging.getLogger(__name__)
-        self.__logger.info("Creating new LED instance at GPIO pin '%i'" % int(gpio_pin))
+        logging.info("Creating new LED instance at GPIO pin '%i'" % int(gpio_pin))
         
         # GPIO setup
         self.__pin = int(gpio_pin)
@@ -19,11 +16,11 @@ class SwitchIndicator:
         return GPIO.input(self.__pin)
 
     def turn_on(self):
-        self.__logger.info("Turning on led at GPIO %s" % self.__pin)
+        logging.info("Turning on led at GPIO %s" % self.__pin)
         GPIO.output(self.__pin, GPIO.HIGH)
 
     def turn_off(self):
-        self.__logger.info("Turning off led at GPIO %s" % self.__pin)
+        logging.info("Turning off led at GPIO %s" % self.__pin)
         GPIO.output(self.__pin, GPIO.LOW)
 
     def toggle(self):
@@ -31,3 +28,6 @@ class SwitchIndicator:
             self.turn_off()
         else:
             self.turn_on()
+
+    def __del__(self):
+        self.turn_off()
