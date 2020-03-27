@@ -36,3 +36,71 @@ Plan for next week:
 * Complete global logging configuration
 * Light switch led indicator control
 * Control on/off state of single light
+
+### Week 3
+
+Status report:
+* Completed global logging configuration
+* Light switch LED indicator control
+
+Plan for next week:
+* Continued R&D for hardware design
+* Communication between hardware devices
+
+### Week 4
+
+Staus report:
+* Hardware build: ordered assorted gears
+* Wrote test scripts to prove communication between devices (demonstrated switch position controlling led in class)
+
+Plan for next week:
+* Continued R&D for hardware design
+
+### Week 5
+
+Status report:
+* Hardware build: Installed gears to switch by 1) drilling directly through the pivot point on the plastic light switch 2) inserting a wooden rod through the switch 3) drilling holes in the center of plastic gears 4) fixing gears to wooden rod
+* Application is printing switch positional data
+
+Plan for next week:
+* Continued R&D for hardware design
+* Message queueing system
+
+### Week 6
+
+Plan for next week:
+* Hardware build: R&D with motor control including 1) experimenting with different power levels and intervals
+* Experimentation with python's queue library.  Built a simple FIFO queue for sending hardware commands to the switch.
+
+Plan for next week:
+* Continued R&D for hardware design
+* Continued devleopment on message queue system.  Retrieve state updates from switch.
+
+### Week 7
+
+Status report:
+* Hardware build: ordered parts to install motors to switch
+* Continued development on message queue system. Set up multiple queues for message/reply
+
+Plan for next week:
+* Continued R&D for hardware design
+
+### Week 8
+
+Status report:
+* Hardware build: conitnued R&D with motor control
+
+Plan for next week:
+* Continued R&D for hardware design
+* Continued development on message queue system
+
+### Week 9
+
+Status report:
+* Hardware build: continued R&D attaching gearing to all devices
+
+Plan for next week:
+* Continued R&D for hardware design
+* Continued development on message queue system
+
+
